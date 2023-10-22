@@ -24,32 +24,39 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        this.edUserInput=findViewById(R.id.edUserInput);
-        this.tvResult=findViewById(R.id.tvResult);
+        this.edUserInput = findViewById(R.id.edUserInput);
+        this.tvResult = findViewById(R.id.tvResult);
 
 
         this.spinner = (Spinner) findViewById(R.id.spinnerCountOption);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource( this,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.selection_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         this.spinner.setAdapter(adapter);
     }
 
     public void buttonCountClick(View view) {
-        String charsSelection= getResources().getString(R.string.chars_selection);
+        String charsSelection = getResources().getString(R.string.chars_selection);
 
-        if(this.spinner.getSelectedItem().toString().equalsIgnoreCase(charsSelection)) {
+        String userInputTrimmed = this.edUserInput.getText().toString().trim();
 
-            String userInput = this.edUserInput.getText().toString();
-            Log.i("UserText", userInput);
+        if (userInputTrimmed.isEmpty()) {
+            Toast.makeText(this, "Not Implemented", Toast.LENGTH_SHORT).show();
+            this.tvResult.setText("0");
+        } else {
+            if (this.spinner.getSelectedItem().toString().equalsIgnoreCase(charsSelection)) {
 
-            int count = WordCounter.getCharsCount(userInput);
-            Log.i("UserText", String.valueOf(count));
+                String userInput = this.edUserInput.getText().toString();
+                Log.i("UserText", userInput);
 
-            this.tvResult.setText(String.valueOf(count));
-        }
-        else {
-            Toast.makeText(this,"Not Implemented", Toast.LENGTH_SHORT).show();
+                int count = WordCounter.getCharsCount(userInput);
+                Log.i("UserText", String.valueOf(count));
+
+                this.tvResult.setText(String.valueOf(count));
+            } else {
+                int count = WordCounter.getWordsCount(userInputTrimmed);
+                this.tvResult.setText(String.valueOf(count));
+            }
         }
     }
 }
